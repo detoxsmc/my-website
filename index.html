@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изучение немецких слов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+            transform: scale(0.95); /* Уменьшение на 5% */
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: center;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+        .options button.correct {
+            background: #90ee90;
+        }
+        .options button.wrong {
+            background: #ffcccb;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 id="word">Слово</h1>
+        <img id="wordImage" src="" alt="Изображение">
+        <div class="options" id="options"></div>
+        <button id="next" style="display:none; margin-top: 10px;">Далее</button>
+    </div>
+
+    <script>
+        const words = [
+            {
+                image: "forehead.png",
+                russian: "ЛОБ",
+                options: ["das Knie", "die Hand", "die Stirn", "der Fuß"],
+                correct: "die Stirn"
+            },
+            {
+                image: "knee.png",
+                russian: "КОЛЕНО",
+                options: ["das Bein", "der Arm", "das Knie", "der Kopf"],
+                correct: "das Knie"
+            },
+            {
+                image: "Mund.png",
+                russian: "РОТ",
+                options: ["der Mund", "das Auge", "die Nase", "das Ohr"],
+                correct: "der Mund"
+            },
+            {
+                image: "Kinn.png",
+                russian: "ПОДБОРОДОК",
+                options: ["der Hals", "das Kinn", "die Wange", "das Augenlid"],
+                correct: "das Kinn"
+            },
+            {
+                image: "Hals.png",
+                russian: "ШЕЯ",
+                options: ["der Hals", "der Nacken", "die Oberlippe", "das Ohrläppchen"],
+                correct: "der Hals"
+            },
+             {
+                image: "Wange.png",
+                russian: "ЩЕКА",
+                options: ["der Hals", "der Nacken", "die Oberlippe", "die Wange"],
+                correct: "die Wange"
+            }
+        ];
+
+        let index = 0;
+        let correctAnswers = 0; // Подсчет правильных ответов
+        let wrongAnswers = 0;   // Подсчет неправильных ответов
+
+        function loadWord() {
+            const word = words[index];
+            document.getElementById("word").textContent = word.russian;
+            document.getElementById("wordImage").src = word.image;
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+            document.getElementById("next").style.display = "none";
+
+            word.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(button, option, word.correct);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(button, answer, correct) {
+            if (answer === correct) {
+                button.classList.add("correct");
+                correctAnswers++; // Увеличиваем счетчик правильных ответов
+            } else {
+                button.classList.add("wrong");
+                wrongAnswers++; // Увеличиваем счетчик неправильных ответов
+            }
+            document.querySelectorAll(".options button").forEach(btn => btn.disabled = true);
+            document.getElementById("next").style.display = "block";
+        }
+
+        document.getElementById("next").onclick = () => {
+            if (index < words.length - 1) {
+                index++;
+                loadWord();
+            } else {
+                // Показываем результаты игры
+                document.body.innerHTML = `
+                    <h1>Игра завершена!</h1>
+                    <p>Правильных ответов: ${correctAnswers}</p>
+                    <p>Неправильных ответов: ${wrongAnswers}</p>
+                `;
+            }
+        };
+
+        loadWord();
+    </script>
+</body>
+</html>
