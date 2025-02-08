@@ -11,7 +11,7 @@
             background-color: #f8f8f8;
             margin: 0;
             padding: 20px;
-            transform: scale(0.95); /* Уменьшение на 5% */
+            transform: scale(0.95);
         }
         .card {
             background: white;
@@ -53,47 +53,17 @@
 
     <script>
         const words = [
-            {
-                image: "forehead.png",
-                russian: "ЛОБ",
-                options: ["das Knie", "die Hand", "die Stirn", "der Fuß"],
-                correct: "die Stirn"
-            },
-            {
-                image: "knee.png",
-                russian: "КОЛЕНО",
-                options: ["das Bein", "der Arm", "das Knie", "der Kopf"],
-                correct: "das Knie"
-            },
-            {
-                image: "Mund.png",
-                russian: "РОТ",
-                options: ["der Mund", "das Auge", "die Nase", "das Ohr"],
-                correct: "der Mund"
-            },
-            {
-                image: "Kinn.png",
-                russian: "ПОДБОРОДОК",
-                options: ["der Hals", "das Kinn", "die Wange", "das Augenlid"],
-                correct: "das Kinn"
-            },
-            {
-                image: "Hals.png",
-                russian: "ШЕЯ",
-                options: ["der Hals", "der Nacken", "die Oberlippe", "das Ohrläppchen"],
-                correct: "der Hals"
-            },
-             {
-                image: "Wange.png",
-                russian: "ЩЕКА",
-                options: ["der Hals", "der Nacken", "die Oberlippe", "die Wange"],
-                correct: "die Wange"
-            }
+            { image: "forehead.png", russian: "ЛОБ", options: ["das Knie", "die Hand", "die Stirn", "der Fuß"], correct: "die Stirn" },
+            { image: "knee.png", russian: "КОЛЕНО", options: ["das Bein", "der Arm", "das Knie", "der Kopf"], correct: "das Knie" },
+            { image: "Mund.png", russian: "РОТ", options: ["der Mund", "das Auge", "die Nase", "das Ohr"], correct: "der Mund" },
+            { image: "Kinn.png", russian: "ПОДБОРОДОК", options: ["der Hals", "das Kinn", "die Wange", "das Augenlid"], correct: "das Kinn" },
+            { image: "Hals.png", russian: "ШЕЯ", options: ["der Hals", "der Nacken", "die Oberlippe", "das Ohrläppchen"], correct: "der Hals" },
+            { image: "Wange.png", russian: "ЩЕКА", options: ["der Hals", "der Nacken", "die Oberlippe", "die Wange"], correct: "die Wange" }
         ];
 
         let index = 0;
-        let correctAnswers = 0; // Подсчет правильных ответов
-        let wrongAnswers = 0;   // Подсчет неправильных ответов
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
 
         function loadWord() {
             const word = words[index];
@@ -112,14 +82,20 @@
         }
 
         function checkAnswer(button, answer, correct) {
+            document.querySelectorAll(".options button").forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correct) {
+                    btn.classList.add("correct");
+                }
+            });
+            
             if (answer === correct) {
                 button.classList.add("correct");
-                correctAnswers++; // Увеличиваем счетчик правильных ответов
+                correctAnswers++;
             } else {
                 button.classList.add("wrong");
-                wrongAnswers++; // Увеличиваем счетчик неправильных ответов
+                wrongAnswers++;
             }
-            document.querySelectorAll(".options button").forEach(btn => btn.disabled = true);
             document.getElementById("next").style.display = "block";
         }
 
@@ -128,7 +104,6 @@
                 index++;
                 loadWord();
             } else {
-                // Показываем результаты игры
                 document.body.innerHTML = `
                     <h1>Игра завершена!</h1>
                     <p>Правильных ответов: ${correctAnswers}</p>
